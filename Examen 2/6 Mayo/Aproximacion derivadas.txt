@@ -1,0 +1,59 @@
+function ejemplo_aprox_deriv()
+  clc; clear;
+
+  %Funcion
+  f=@(x) 2^x+cos(x)-x^2;
+
+  %Derivada Analitica
+  fd=@(x) 2^x*log(2)-sin(x)-2*x;
+
+  %Punto a evaluar la derivada
+  x0=0.5;
+
+  fd_exact=fd(x0)
+  fd_aprox1=dif_fin_atras(f,x0)
+  fd_aprox2=dif_fin_centrada(f,x0)
+
+end
+
+function yk=dif_fin_atras(f,x0)
+  iterMax=1000;
+  tol=1e-20;
+  h=1;
+  yk=(f(x0+h)-f(x0))/h;
+  for k=1:iterMax
+    h=10^(-k);
+    ykN=(f(x0+h)-f(x0))/h;
+    er=abs(ykN-yk);
+    if er<tol
+      yk=ykN;
+      k
+      break
+    end
+    yk=ykN;
+  end
+
+end
+
+function yk=dif_fin_centrada(f,x0)
+  iterMax=1000;
+  tol=1e-20;
+  h=1;
+  yk=(f(x0+h)-f(x0-h))/(2*h);
+  for k=1:iterMax
+    h=10^(-k);
+    ykN=(f(x0+h)-f(x0-h))/(2*h);
+    er=abs(ykN-yk);
+    if er<tol
+      yk=ykN;
+      k
+      break
+    end
+    yk=ykN;
+  end
+
+end
+
+
+
+

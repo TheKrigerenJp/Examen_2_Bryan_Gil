@@ -1,0 +1,76 @@
+function metodo_varios_metodos()
+  f=@(x,y) y-x.^2+1;
+  a=0; b=2;
+  y0=0.5;
+  M=5; %Numero de puntos
+
+  [xvE,yvE]=euler(f,a,b,y0,M);
+  [xvPC,yvPC]=predictor_corrector(f,a,b,y0,M);
+  [xvRK3,yvRK3]=rk3(f,a,b,y0,M)
+
+  %Graficar solucion analitica
+
+  hold on
+
+  x_graf=a:0.001:b;
+  y_graf=(x_graf+1).^2-0.5*exp(x_graf);
+  plot(x_graf,y_graf,'b')
+
+  %Aproximacion del Método de Euler
+  stem(xvE,yvE,'r')
+  %plot(xvE,yvE,'r')
+
+  %Aproximacion del Método Predictor-Corrector
+  stem(xvPC,yvPC,'g')
+  %plot(xvPC,yvPC,'g')
+
+
+  %Aproximacion de Runge Kutta orden 3
+  stem(xvRK3,yvRK3,'k')
+  %plot(xvPC,yvPC,'k')
+
+
+
+  legend('Solucion','Euler','Predictor-Corrector','Runge Kutta 3')
+
+
+end
+
+function [xv,yv]=euler(f,a,b,y0,M)
+  %Calcular xk
+  h=(b-a)/(M-1);
+  xv=a:h:b;
+  yv=[y0];
+  for k=1:M-1
+    yk=yv(k)+h*f(xv(k),yv(k)); %Formula de Euler
+    yv=[yv yk];
+  end
+end
+
+function [xv,yv]=predictor_corrector(f,a,b,y0,M)
+  %Calcular xk
+  h=(b-a)/(M-1);
+  xv=a:h:b;
+  yv=[y0];
+  for k=1:M-1
+    zn=yv(k)+h*f(xv(k),yv(k)); %Formula Predictor
+    yk=yv(k)+(h/2)*(f(xv(k),yv(k))+f(xv(k+1),zn)) %Formula Corrector
+    yv=[yv yk];
+  end
+end
+
+function [xv,yv]=rk3(f,a,b,y0,M)
+  %Calcular xk
+  h=(b-a)/(M-1);
+  xv=a:h:b;
+  yv=[y0];
+  for k=1:M-1
+    k1=f(xv(k),yv(k));
+    k2=f(xv(k)+h/2,yv(k)+(h/2)*k1);
+    k3=f(xv(k)+h,yv(k)+h*(2*k1-1));
+    yk=yv(k)+(h/6)*(k1+4*k2+k3);
+    yv=[yv yk];
+  end
+end
+
+

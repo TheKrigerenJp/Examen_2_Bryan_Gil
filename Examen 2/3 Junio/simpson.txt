@@ -1,0 +1,35 @@
+function y=simpson(f,a,b)
+
+  fn=str2func(['@(x)' f]);
+  y=(b-a)/6*(fn(a)+4*fn((a+b)/2)+fn(b));
+
+end
+
+
+function I=simpson_compuesto(f,a,b,n)
+  I=0;
+  h=(b-a)/n;
+  x=a:h:b;
+  for k=0:n-1
+    I=I+simpson(f,x(k+1),x(k+2));
+  end
+end
+
+function Sk=simpson_iterativo(f,a,b)
+
+  tol=1e-10;
+  numInterMax=10000000;
+  Sk=simpson_compuesto(f,a,b,2);
+
+  for k=3:numInterMax
+    Sk_N=simpson_compuesto(f,a,b,k);
+    er=abs(Sk_N-Sk);
+    if er<tol
+      Sk=Sk_N;
+      k
+      break
+    endif
+    Sk=Sk_N;
+  end
+end
+

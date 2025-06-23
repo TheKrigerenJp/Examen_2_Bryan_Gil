@@ -1,0 +1,35 @@
+function y=trapecio(f,a,b)
+
+  fn=str2func(['@(x)' f]);
+  y=(fn(a)+fn(b))*(b-a)/2;
+
+end
+
+
+function I=trapecio_compuesto(f,a,b,n)
+  I=0;
+  h=(b-a)/n;
+  x=a:h:b;
+  for k=0:n-1
+    I=I+trapecio(f,x(k+1),x(k+2));
+  end
+end
+
+function Sk=trapecio_iterativo(f,a,b)
+
+  tol=1e-16;
+  numInterMax=10000000;
+  Sk=trapecio_compuesto(f,a,b,2);
+
+  for k=3:numInterMax
+    Sk_N=trapecio_compuesto(f,a,b,k);
+    er=abs(Sk_N-Sk);
+    if er<tol
+      Sk=Sk_N;
+      k
+      break
+    endif
+    Sk=Sk_N;
+  end
+end
+

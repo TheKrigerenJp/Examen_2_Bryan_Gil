@@ -1,0 +1,33 @@
+function metodo_euler()
+  f=@(x,y) y-x.^2+1;
+  a=0; b=2;
+  y0=0.5;
+  M=5; %Numero de puntos
+  [xv,yv]=euler(f,a,b,y0,M)
+
+  %Graficar solucion analitica
+
+  hold on
+
+  x_graf=a:0.001:b;
+  y_graf=(x_graf+1).^2-0.5*exp(x_graf);
+  plot(x_graf,y_graf,'b')
+
+  stem(xv,yv,'r')
+  %plot(xv,yv,'r')
+
+  legend('Solucion','Euler')
+
+
+end
+
+function [xv,yv]=euler(f,a,b,y0,M)
+  %Calcular xk
+  h=(b-a)/(M-1);
+  xv=a:h:b;
+  yv=[y0];
+  for k=1:M-1
+    yk=yv(k)+h*f(xv(k),yv(k)); %Formula de Euler
+    yv=[yv yk];
+  end
+end
